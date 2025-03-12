@@ -37,7 +37,7 @@ void printCard(char suit, char rank) {
       printf("K\n");
       break;
     default:
-      printf("%i", rank);
+      printf("%i\n", rank);
       break;
   }
 }
@@ -65,7 +65,6 @@ int main() {
   for (i = 0; i < 52; i++) {
     deck[i].inPlay = 0;
   }
-  for (i = 0; i < 52; i++) {
-    printCard(deck[i].suit, deck[i].rank);
-  }
+
+  
 }
