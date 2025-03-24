@@ -19,6 +19,7 @@ typedef struct Card {
 typedef struct Person {
   card c1;
   card c2;
+  int bal;
 } Player;
 
 void printCard(char suit, char rank) {
@@ -42,11 +43,32 @@ void printCard(char suit, char rank) {
   }
 }
 
+int handStrength(card c1, card c2, card c3, card c4, card c5) {
+  int flush = 0;
+  int pairs = 0;
+  int threekind = 0;
+  int fourkind = 0;
+  int straight = 0;
+  int nums[5] = {c1.rank, c2.rank, c3.rank, c4.rank, c5.rank};
+  int i, j, temp;
+  
+  //Sort nums
+  for (i = 0; i < 5; i++) {
+    temp = nums[i];
+    for (j = i; j < 5; j++) {
+      if (nums[j] > temp) {
+
+      } 
+    }
+  }
+
+}
+
 //int main(int argc, char *argv[]) {
 int main() {
-  //int in1 = atoi(argv[1]);
-  int in1 = 1000;
-  int i;
+  //int balance = atoi(argv[1]);
+  int balance = 1000;
+  int i, choice = 1;
   char suits[4] = {'D', 'H', 'S', 'C'};
   card deck[52];
   card community[5];
@@ -65,6 +87,8 @@ int main() {
   for (i = 0; i < 52; i++) {
     deck[i].inPlay = 0;
   }
-
   
+  while (choice) {
+    
+  }
 }
