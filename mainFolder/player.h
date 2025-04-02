@@ -4,14 +4,14 @@
 #define MAX_NAME_LENGTH 50  // Constant for name size
 
 // Define Player struct
-typedef struct {
+typedef struct player {
     char name[MAX_NAME_LENGTH];
-    float balance;
-} Player;
+    int balance;
+} player;
 
 // Function prototypes
-void createPlayer(Player *p); 
-void displayPlayer(const Player *p);
-void updateBalance(Player *p, float amount);
+void createPlayer(player *p); 
+void displayPlayer(const player *p);
+void updateBalance(player *p, int amount);
 
 #endif // PLAYER_H

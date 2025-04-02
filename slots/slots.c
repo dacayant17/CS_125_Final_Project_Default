@@ -1,42 +1,91 @@
+/*
+Authors: Preston
+Reference: CS125, Google
+Todo: Error checking
+*/
+
+
 #include <stdio.h>
 #include <time.h>
 #include "slots.h"
 
-
 #define SYMBOL_COUNT 8
 
 
+/*
+ * spinSlots - Simulates spinning the slot machine by randomly assigning values to each of the three slots.
+ * 
+ * This function uses the rand() function to generate a random number between 0 and SYMBOL_COUNT-1 
+ * for each of the three slots. The values are stored in the provided array `slots`.
+ *
+ * @param slots: An array of 3 integers where the results of the slot machine spin will be stored.
+*/
 void spinSlots(int *slots) {
     //spins 3 times for each slot
-    for (int i = 0; i < 3; i++) {
+    int i;
+    for (i = 0; i < 3; i++) {
         slots[i] = rand() % SYMBOL_COUNT;
     }
 
 }
 
 
+/*
+ * displaySlots - Displays the results of the slot machine spin.
+ * 
+ * This function prints the values stored in the `slots` array, showing the values of each of the 3 slots.
+ *
+ * @param slots: An array of 3 integers that holds the values of the slot machine after spinning.
+*/
 void displaySlots(int *slots) {
     printf("Slot 1: %d  |  Slot 2: %d  |  Slot 3: %d\n", slots[0], slots[1], slots[2]);
 }
 
 
-void checkWin(int *slots) {
+/*
+ * checkWin - Checks whether the player has won by comparing the values of the three slots.
+ * 
+ * If all three slots have the same value, the player wins. Otherwise, the player loses.
+ *
+ * @param slots: An array of 3 integers that holds the values of the slot machine after spinning.
+ */
+void checkWin(int *slots, player *p) {
     if (slots[0] == slots[1] && slots[1] == slots[2]) {
         //going to implement more features
         printf("You win! All symbols match: %d\n", slots[0]);
+        updateBalance(p, 200);
+        displayPlayer(p);
     } else {
         printf("Sorry, you lose. Try again!\n");
     }
 }
 
 
+/*
+ * displayHelp - Displays a help message explaining the objective of the game.
+ * 
+ * Provides a brief description of the game, explaining the goal to match ll three slot symbols.
+ */
 void displayHelp() {
     printf("Welcome to the Slot Machine!\n");
     printf("The goal is to match all three slot symbols (numbers 0-7).\n");
     printf("Spin and see if you win!\n");
 }
 
-void playSlots(Player *p) {
+
+/**
+ * playSlots - Manages the slot machine game, allowing the player to interact
+ *             with the game through a menu
+ * 
+ * This function provides a menu with 3 choices:
+ * 1. Spin the slots: Calls spinSlots() to generate random values for the slots, displays the results, 
+ *    and checks if the player won using checkWin().
+ * 2. Help: Displays a help message using displayHelp().
+ * 3. Exit: Ends the game with a farewell message.
+ *
+ * @param p: A pointer to the player struct, representing the player involved in the game.
+ */
+void playSlots(player *p) {
 
     int slots[3]; 
 
@@ -54,7 +103,7 @@ void playSlots(Player *p) {
             case 1:
                 spinSlots(slots);  
                 displaySlots(slots);  
-                checkWin(slots);  
+                checkWin(slots, p);  
                 break;
             case 2:
                 displayHelp();
@@ -67,6 +116,5 @@ void playSlots(Player *p) {
         }
 
     } while (choice != 3);
-
-    return 0;
+        return;
 }

@@ -1,9 +1,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include "player.h"  // Include the Player struct and functions
+/* Include the Player struct and functions */
+#include "player.h"
 
-// Function prototypes (if needed for additional features)
+/* Function prototypes (if needed for additional features) */
 void welcomeMessage();  
 
 #endif // MAIN_H

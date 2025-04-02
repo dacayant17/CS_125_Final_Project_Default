@@ -4,9 +4,9 @@
 #include "../mainFolder/player.h"  // Correct path to import Player struct
 
 // Function prototype for slot machine
-void playSlots(Player *p);
+void playSlots(player *p);
 void displaySlots(int *slots);
-void checkWin(int *slots);
+void checkWin(int *slots, player *p);
 void displayHelp();
 
 #endif // SLOTS_H
