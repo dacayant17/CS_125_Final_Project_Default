@@ -21,6 +21,8 @@ typedef struct Person {
   card c1;
   card c2;
   int bal;
+  int fold;
+  int 
 } Player;
 
 void printCard(char suit, char rank) {
@@ -48,7 +50,6 @@ int ascending(const void* a,const void* b) {
   return *(int*)a - *(int*)b;
 }
 
-
 int handStrength(card c1, card c2, card c3, card c4, card c5) {
   int flush = 1;
   int pairs = 0;
@@ -58,8 +59,11 @@ int handStrength(card c1, card c2, card c3, card c4, card c5) {
   int royal = 0;
   int nums[5] = {c1.rank, c2.rank, c3.rank, c4.rank, c5.rank};
   int record[5][2] = {0};
+  int largerData = 0;
+  int smallerData = 0;
   char suits[5] = {c1.suit, c2.suit, c3.suit, c4.suit, c5.suit};
   int i, j;
+  int score = 0;
   
   //Sort values
   qsort(nums, 5, sizeof(int), ascending);
@@ -88,13 +92,16 @@ int handStrength(card c1, card c2, card c3, card c4, card c5) {
     }
   }
 
-  printf("%i %i %i %i %i \n", record[0][0], record[1][0], record[2][0], record[3][0], record[4][0]);
-  printf("%i %i %i %i %i \n", record[0][1], record[1][1], record[2][1], record[3][1], record[4][1]);
-
   //Pair check
   for (i = 0; i < 5; i++) {
     if (record[i][1] == 2) {
       pairs++;
+      if (smallerData > 0) {
+        largerData += record[i][0];
+      }
+      else {
+        smallerData += record[i][0];
+      }
     }
   }
 
@@ -102,6 +109,7 @@ int handStrength(card c1, card c2, card c3, card c4, card c5) {
   for (i = 0; i < 5; i++) {
     if (record[i][1] == 3) {
       threekind++;
+      largerData += record[i][0];
     }
   }
 
@@ -109,6 +117,7 @@ int handStrength(card c1, card c2, card c3, card c4, card c5) {
   for (i = 0; i < 5; i++) {
     if (record[i][1] == 4) {
       fourkind++;
+      largerData += record[i][0];
     }
   }
 
@@ -121,7 +130,99 @@ int handStrength(card c1, card c2, card c3, card c4, card c5) {
   }
 
   //Royal Check
+  if (straight) {
+    if (record[4][0] == 14) {
+      straight--;
+      royal++;
+    }
+  }
 
+  //Royal Flush
+  if (royal && flush) {
+    score += 90000;
+  }
+
+  //Straight Flush
+  if (straight && flush) {
+    score += 80000;
+    score += (record[4][0] * 100);
+  }
+
+  //Four of a Kind
+  if (fourkind) {
+    score += 70000;
+    score += (largerData * 100);
+  }
+
+  //Full House
+  if (pairs && threekind) {
+    score += 60000;
+    score += (largerData * 100);
+    score += smallerData;
+  }
+
+  //Straight
+
+  if (straight && !flush) {
+    score += 40000;
+    score += (record[4][0] * 100);
+  }
+
+  //Three of a Kind
+  if (threekind && (pairs == 0)) {
+    score += 30000;
+    score += (largerData * 100);
+  }
+
+  //Two Pair
+
+  if (pairs > 1) {
+    score += 20000;
+    score += (largerData * 100);
+    score += smallerData;
+  }
+
+  //Pair
+  if ((!(score > 0)) && pairs) {
+    score += 10000;
+    score += (smallerData * 100);
+  }
+
+  if ((!(score > 0)) && flush) {
+    score += 50000;
+    score += (record[4][0] * 100);
+  }
+
+  //High Card
+  if (!(score > 0)) {
+    score += record[4][0];
+  }
+
+  return score;
+}
+
+int strongestHand(card c1, card c2, card c3, card c4, card c5, card c6, card c7) {
+  card list[7] = {c1, c2, c3, c4, c5, c6, c7};
+  int largest = 0;
+  int temp = 0;
+  int i, j, k, l, m;
+
+  for (i = 0; i < 3; i++) {
+    for ((j = i + 1); j < 4; j++) {
+      for ((k = j + 1); k < 5; k++) {
+        for ((l = k + 1); l < 6; l++) {
+          for ((m = l + 1); m < 7; m++) {
+            temp = handStrength(list[i], list[j], list[k], list[l], list[m]);
+            if (temp > largest) {
+              largest = temp;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return largest;
 }
 
 //int main(int argc, char *argv[]) {
@@ -135,7 +236,7 @@ int main() {
   card community[5];
   srand(time(NULL));
 
-  for (i = 1; i < 13; i++) {
+  for (i = 0; i < 13; i++) {
     deck[i].suit = suits[0];
     deck[(i + 13)].suit = suits[1];
     deck[(i + 26)].suit = suits[2];
@@ -149,10 +250,19 @@ int main() {
   for (i = 0; i < 52; i++) {
     deck[i].count = 0;
   }
+
+  handStrength(deck[9], deck[10], deck[11], deck[12], deck[8]);//Royal Flush
+  handStrength(deck[0], deck[1], deck[2], deck[3], deck[4]);//Straight Flush
+  handStrength(deck[1], deck[14], deck[27], deck[40], deck[31]);//Four of a Kind
+  handStrength(deck[1], deck[14], deck[27], deck[41], deck[28]); //Full House
+  handStrength(deck[0], deck[1], deck[2], deck[5], deck[6]);//Flush
+  handStrength(deck[0], deck[1], deck[2], deck[3], deck[17]);//Straight
+  handStrength(deck[1], deck[14], deck[27], deck[2], deck[32]);//Three of a Kind
+  handStrength(deck[1], deck[14], deck[28], deck[41], deck[32]); //Two pair
+  handStrength(deck[1], deck[2], deck[15], deck[31], deck[32]); //Pair
+  handStrength(deck[1], deck[2], deck[3], deck[31], deck[32]); //High Card
+
   
-  handStrength(deck[1], deck[14], deck[27], deck[40], deck[31]);
-
-
 
   //while (choice) {
     
