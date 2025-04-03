@@ -230,6 +230,7 @@ int main() {
   //int balance = atoi(argv[1]);
   //char name[50] = atoi(argv[2]);
   int balance = 1000;
+  int pot = 0;
   int i, choice = 1;
   char suits[4] = {'D', 'H', 'S', 'C'};
   card deck[52];
@@ -262,7 +263,7 @@ int main() {
   handStrength(deck[1], deck[2], deck[15], deck[31], deck[32]); //Pair
   handStrength(deck[1], deck[2], deck[3], deck[31], deck[32]); //High Card
 
-  
+
 
   //while (choice) {
     
