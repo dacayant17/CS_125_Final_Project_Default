@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
+#include <ctype.h>
 /*
  A simple game of roulette
 
@@ -147,7 +147,11 @@ int main(){
                 printf("Type your bet:");
                 fgets(buffer, sizeof(buffer), stdin);
                 sscanf(buffer,"%d%c%d",&num1,to,&num2);
-                if(strcmp(buffer,"EVEN\n")==0 || strcmp(buffer,"even\n")==0 || strcmp(buffer,"odd\n")==0 || strcmp(buffer,"ODD\n")==0 || strcmp(buffer,"red\n")==0 || strcmp(buffer,"blue\n")==0 || strcmp(buffer,"RED\n")==0 || strcmp(buffer,"BLUE\n")==0){
+                for(idx=0;sizeof(buffer)>idx;idx++){
+                    buffer[idx]=toupper(buffer[idx]);
+                }
+
+                if(strcmp(buffer,"EVEN\n")==0 || strcmp(buffer,"ODD\n")==0 || strcmp(buffer,"RED\n")==0 || strcmp(buffer,"BLUE\n")==0){
                     printf("\nYour bet %s",buffer);
                     betamount(totbal,bettimes,&bet[bettimes],&run);
                     bettype[bettimes]=malloc(strlen(buffer)+1);
@@ -198,7 +202,7 @@ int main(){
                     printf(", %d\n",result.numres);
                     for(idx=0;idx<bettimes;idx++){
                         sscanf(bettype[idx],"%d%c%d",&num1,to,&num2);
-                        if (strcmp(bettype[idx],"blue\n")==0 || strcmp(bettype[idx],"BLUE\n")==0){
+                        if (strcmp(bettype[idx],"BLUE\n")==0){
                             if (strcmp(result.colorres,"Blue")==0){
                                 printf("You win!\n");
                                 win=bet[idx]*2+win;
@@ -206,7 +210,7 @@ int main(){
                                 printf("You Loose\n");
                                 loose=bet[idx]+loose;                   
                             }
-                        }else if(strcmp(bettype[idx],"EVEN\n")==0 || strcmp(bettype[idx],"even\n")==0 ){
+                        }else if(strcmp(bettype[idx],"EVEN\n")==0){
                             if (result.numres%2==0){
                                 printf("You win!\n");
                                 win=bet[idx]*2+win;
@@ -214,7 +218,7 @@ int main(){
                                 printf("You Loose\n");
                                 loose=bet[idx]+loose;                     
                             }
-                        }else if(strcmp(bettype[idx],"odd\n")==0 || strcmp(bettype[idx],"ODD\n")==0){
+                        }else if(strcmp(bettype[idx],"ODD\n")==0){
                             if (result.numres%2==1){
                                 printf("You win!\n");
                                 win=bet[idx]*2+win;
@@ -222,7 +226,7 @@ int main(){
                                 printf("You Loose\n");
                                 loose=bet[idx]+loose;                     
                             }
-                        }else if(strcmp(bettype[idx],"red\n")==0 || strcmp(bettype[idx],"RED\n")==0){
+                        }else if(strcmp(bettype[idx],"RED\n")==0){
                             if (strcmp(result.colorres,"Red")==0){
                                 printf("You win!\n");
                                 win=bet[idx]*2+win;
