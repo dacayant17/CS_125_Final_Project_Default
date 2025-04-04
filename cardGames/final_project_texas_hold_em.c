@@ -22,8 +22,11 @@ typedef struct Person {
   card c1;
   card c2;
   int bal;
-  int fold;
-  int 
+  int foldChance;
+  int betChance;
+  int callChance;
+  char name[50];
+  int isPlayer;
 } Player;
 
 void printCard(char suit, char rank) {
@@ -230,14 +233,21 @@ int strongestHand(card c1, card c2, card c3, card c4, card c5, card c6, card c7)
 int main() {
   //int balance = atoi(argv[1]);
   //char name[50] = atoi(argv[2]);
+  char name[50] = "Example";
+  char nameList[20][10] = {"Amy", "Bernard", "Chris", "Dan", "Ed", "Fred", "George", "Han", "James",
+                           "Kyle", "Liam", "Mary", "Noah", "Owen", "Phil", "Ryan", "Sam", "Tom", 
+                           "Wayne", "Zach"};
   int balance = 1000;
   int pot = 0;
-  int i, choice = 1;
+  int choice = 1;
+  int i, odds, temp;
   char suits[4] = {'D', 'H', 'S', 'C'};
   card deck[52];
-  card community[5];
+  card comCards[5];
+  Player players[5];
   srand(time(NULL));
 
+  //Create deck
   for (i = 0; i < 13; i++) {
     deck[i].suit = suits[0];
     deck[(i + 13)].suit = suits[1];
@@ -250,21 +260,27 @@ int main() {
   }
 
   for (i = 0; i < 52; i++) {
-    deck[i].count = 0;
+    deck[i].count = 1;
   }
 
-  handStrength(deck[9], deck[10], deck[11], deck[12], deck[8]);//Royal Flush
-  handStrength(deck[0], deck[1], deck[2], deck[3], deck[4]);//Straight Flush
-  handStrength(deck[1], deck[14], deck[27], deck[40], deck[31]);//Four of a Kind
-  handStrength(deck[1], deck[14], deck[27], deck[41], deck[28]); //Full House
-  handStrength(deck[0], deck[1], deck[2], deck[5], deck[6]);//Flush
-  handStrength(deck[0], deck[1], deck[2], deck[3], deck[17]);//Straight
-  handStrength(deck[1], deck[14], deck[27], deck[2], deck[32]);//Three of a Kind
-  handStrength(deck[1], deck[14], deck[28], deck[41], deck[32]); //Two pair
-  handStrength(deck[1], deck[2], deck[15], deck[31], deck[32]); //Pair
-  handStrength(deck[1], deck[2], deck[3], deck[31], deck[32]); //High Card
+  //Create Other Players
+  for (i = 0; i < 3; i++) {
+    odds = 100;
+    strcpy(((players[i]).name), ((nameList[(rand() % 20)])));
+    temp = (rand() % (odds + 1));
+    odds -= temp;
+    players[i].betChance = temp;
+    temp = (rand() % (odds + 1));
+    odds -= temp;
+    players[i].callChance = temp;
+    players[i].foldChance = odds;
+    players[i].isPlayer = 0;
+  }
 
-
+  //Create Player
+  strcpy(((players[4]).name), (name));
+  players[4].bal = balance;
+  players[4].isPlayer = 1;
 
   //while (choice) {
     
