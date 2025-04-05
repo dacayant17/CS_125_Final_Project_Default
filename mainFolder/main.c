@@ -9,9 +9,10 @@ Todo: Error checking
 #include "player.h"
 #include "main.h"
 #include "../slots/slots.h"
+#include "../roulette/roulette.h"
 
 
-int get_valid_int(const char *prompt) {
+int getValidInt(const char *prompt) {
     int num;
     int result;
 
@@ -31,7 +32,7 @@ int get_valid_int(const char *prompt) {
 }
 
 
-void main_menu(player *p) {
+void mainMenu(player *p) {
     int choice;
 
     while (1 && p->balance != 0) {
@@ -49,9 +50,11 @@ void main_menu(player *p) {
         printf("1. Display player information\n");
         printf("2. Play Slots\n");
         printf("3. Play Texas Hold'em\n");
-        printf("4. Exit\n");
+        printf("4. Play Black jack\n");
+        printf("5. Play Roulette\n");
+        printf("6. Exit\n");
 
-        choice = get_valid_int("Enter your choice: ");
+        choice = getValidInt("Enter your choice: ");
 
         switch (choice) {
             case 1:
@@ -65,6 +68,13 @@ void main_menu(player *p) {
                 printf("Texas Hold'em functionality is coming soon!\n");
                 break;
             case 4:
+                // You can implement the Black jack game here
+                printf("Black jack functionality is coming soon!\n");
+                break;
+            case 5:
+                playRoulette(p);
+                break;
+            case 6:
                 printf("Thanks for playing! Goodbye.\n");
                 return;  // Exit the game
             default:
@@ -84,7 +94,7 @@ int main() {
     createPlayer(&player1);
     displayPlayer(&player1);
 
-    main_menu(&player1);
+    mainMenu(&player1);
 
     return 0;
 }

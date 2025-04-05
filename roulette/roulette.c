@@ -1,24 +1,19 @@
-﻿#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+﻿#include "roulette.h"
+
 
 /*
- A simple game of roulette
+    Authors: Tommy Boston Jr., Preston(I tried my best man, but only god can fix this)
+    Reference: 
+    A simple game of roulette
 
- Even=
- Odd=
- Red= 
- Blue=
- 1-36=
- 0 & 00=
- num1-num2=
+    Even=
+    Odd=
+    Red= 
+    Blue=
+    1-36=
+    0 & 00=
+    num1-num2=
 */
-
-struct spinres{
-    int numres;
-    char colorres[5];
-};
 
 void printTable(){
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -95,7 +90,7 @@ int betamount(int totbal,int bettimes,int *bet, int *run){
 }
 
 
-struct spinres spin() {
+spinres spin() {
     struct spinres s;
     int temp=0;
     s.numres=(rand()%(37-0+1))+0;
@@ -109,9 +104,9 @@ struct spinres spin() {
 }
 
 
-int main(){
+void playRoulette(player *p){
     char buffer[100],to[2],*bettype[100],buffer2[2],buffer3[2];
-    int num1=-1,run=1,num2=-1,bet[100],totbal=1000000,choice,bettimes=0,idx=0,totbet=0,temp,win=0,loose=0,run2=1;
+    int num1=-1,run=1,num2=-1,bet[100],totbal=p->balance,choice,bettimes=0,idx=0,totbet=0,temp,win=0,loose=0,run2=1;
     struct spinres result;
     printf("Welcome to Roulette\n");
     while(run2==1){

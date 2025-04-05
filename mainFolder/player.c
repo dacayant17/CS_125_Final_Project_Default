@@ -68,8 +68,8 @@ int validateBet(player *p) {
 
     // Loop until a valid bet is entered
     do {
-        // Use the get_valid_int function to get a valid input
-        bet = get_valid_int("Enter bet amount: ");
+        // Use the getValidInt function to get a valid input
+        bet = getValidInt("Enter bet amount: ");
 
         if (p->balance == 0) {
             printf("Your balance is zero. You cannot continue playing.\n");

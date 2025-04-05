@@ -1,3 +1,10 @@
+/*
+Authors: Preston
+Reference: CS125, Google
+Todo: Error checking
+*/
+
+
 #ifndef MAIN_H
 #define MAIN_H
 
@@ -6,6 +13,6 @@
 
 /* Function prototypes (if needed for additional features) */
 void welcomeMessage(); 
-int get_valid_input(const char *prompt);
+int getValidInt(const char *prompt);
 
 #endif // MAIN_H

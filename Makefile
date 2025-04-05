@@ -6,7 +6,7 @@ CC = gcc
 CFLAGS = -Wall -ansi
 
 # List of source files
-SRC_FILES = mainFolder/main.c mainFolder/player.c slots/slots.c
+SRC_FILES = mainFolder/main.c mainFolder/player.c slots/slots.c roulette/roulette.c
 
 
 # Output executable

@@ -1,3 +1,10 @@
+/*
+Authors: Preston
+Reference: CS125, Google
+Todo: Error checking
+*/
+
+
 #ifndef SLOTS_H
 #define SLOTS_H
 

@@ -1,7 +1,6 @@
 /*
 Authors: Preston
 Reference: CS125, Google
-Todo: Error checking
 */
 
 
@@ -100,7 +99,7 @@ void playSlots(player *p) {
         printf("1. Spin the slots\n");
         printf("2. Help\n");
         printf("3. Exit\n");
-        choice = get_valid_int("Enter your choice: ");
+        choice = getValidInt("Enter your choice: ");
 
         switch(choice) {
             case 1:
