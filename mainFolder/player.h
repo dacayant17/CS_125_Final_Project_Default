@@ -13,5 +13,6 @@ typedef struct player {
 void createPlayer(player *p); 
 void displayPlayer(const player *p);
 void updateBalance(player *p, int amount);
+int validateBet(player *p);
 
 #endif // PLAYER_H

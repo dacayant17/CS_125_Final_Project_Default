@@ -6,10 +6,8 @@ Todo: Error checking
 
 
 #include <stdio.h>
-#include <time.h>
+#include <stdlib.h>
 #include "slots.h"
-
-#define SYMBOL_COUNT 8
 
 
 /*
@@ -38,7 +36,7 @@ void spinSlots(int *slots) {
  * @param slots: An array of 3 integers that holds the values of the slot machine after spinning.
 */
 void displaySlots(int *slots) {
-    printf("Slot 1: %d  |  Slot 2: %d  |  Slot 3: %d\n", slots[0], slots[1], slots[2]);
+    printf("\nSlot 1: %d  |  Slot 2: %d  |  Slot 3: %d\n", slots[0], slots[1], slots[2]);
 }
 
 
@@ -49,14 +47,13 @@ void displaySlots(int *slots) {
  *
  * @param slots: An array of 3 integers that holds the values of the slot machine after spinning.
  */
-void checkWin(int *slots, player *p) {
+void checkWin(int *slots, player *p, int *bet) {
     if (slots[0] == slots[1] && slots[1] == slots[2]) {
-        //going to implement more features
         printf("You win! All symbols match: %d\n", slots[0]);
-        updateBalance(p, 200);
+        updateBalance(p, (*bet * (slots[0] + 1)));
         displayPlayer(p);
     } else {
-        printf("Sorry, you lose. Try again!\n");
+        printf("\nSorry, you lose. Try again!\n");
     }
 }
 
@@ -64,12 +61,19 @@ void checkWin(int *slots, player *p) {
 /*
  * displayHelp - Displays a help message explaining the objective of the game.
  * 
- * Provides a brief description of the game, explaining the goal to match ll three slot symbols.
+ * Provides a brief description of the game, explaining the goal to match three slot symbols.
  */
 void displayHelp() {
-    printf("Welcome to the Slot Machine!\n");
-    printf("The goal is to match all three slot symbols (numbers 0-7).\n");
-    printf("Spin and see if you win!\n");
+    printf("\n----------------Welcome to the Slot Machine!---------------\n");
+    printf("The goal is to match all three slot symbols (numbered 0-7).\n");
+    printf("---------------------------Legend---------------------------\n");
+    
+    // Prints out multiplier value for each number
+    int i = 0;
+    for (i; i < SYMBOL_COUNT; i++) {
+        printf("All (%ds): %dx multiplier\n", i, i + 1);
+    }
+    printf("\nSpin and good luck! \n");
 }
 
 
@@ -88,7 +92,7 @@ void displayHelp() {
 void playSlots(player *p) {
 
     int slots[3]; 
-
+    int betAmnt;
     int choice;
 
     do {
@@ -96,14 +100,15 @@ void playSlots(player *p) {
         printf("1. Spin the slots\n");
         printf("2. Help\n");
         printf("3. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+        choice = get_valid_int("Enter your choice: ");
 
         switch(choice) {
             case 1:
+                betAmnt = validateBet(p);
+                updateBalance(p, -(betAmnt));
                 spinSlots(slots);  
                 displaySlots(slots);  
-                checkWin(slots, p);  
+                checkWin(slots, p, &betAmnt);  
                 break;
             case 2:
                 displayHelp();

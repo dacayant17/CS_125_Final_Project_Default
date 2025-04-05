@@ -6,7 +6,7 @@ Todo: Error checking
 
 
 #include <stdio.h>
-#include <time.h>
+#include <stdlib.h>
 #include "player.h"
 
 
@@ -51,4 +51,41 @@ void displayPlayer(const player *p) {
 */
 void updateBalance(player *p, int amount) {
     p->balance += amount;
+}
+
+
+/*
+ * validateBet - Validates the bet amount entered by the player.
+ * 
+ * This function ensures that the player has enough money to place the bet,
+ * and that the bet is a positive number.
+ *
+ * @param p: A pointer to the player struct that holds the player's balance.
+ * @return: The validated bet amount.
+ */
+int validateBet(player *p) {
+    int bet;
+
+    // Loop until a valid bet is entered
+    do {
+        // Use the get_valid_int function to get a valid input
+        bet = get_valid_int("Enter bet amount: ");
+
+        if (p->balance == 0) {
+            printf("Your balance is zero. You cannot continue playing.\n");
+            exit(0);
+        }
+        
+        // Check if the bet is valid (greater than 0 and not more than the current balance)
+        if (bet <= 0) {
+            printf("Bet amount must be greater than 0. Please try again.\n");
+        } else if (bet >= p->balance) {
+            printf("You cannot bet your entire balance of $%d. Please bet less than your total balance.\n", p->balance);
+        } else {
+            break;  // Valid bet
+        }
+
+    } while (bet <= 0 || bet > p->balance);
+
+    return bet;  // Return the valid bet amount
 }
