@@ -10,6 +10,7 @@ Todo: Error checking
 #include "main.h"
 #include "../slots/slots.h"
 #include "../roulette/roulette.h"
+#include "../cardGames/blackjack.h"
 
 
 int getValidInt(const char *prompt) {
@@ -68,8 +69,7 @@ void mainMenu(player *p) {
                 printf("Texas Hold'em functionality is coming soon!\n");
                 break;
             case 4:
-                // You can implement the Black jack game here
-                printf("Black jack functionality is coming soon!\n");
+                playBlackjack(p);
                 break;
             case 5:
                 playRoulette(p);
