@@ -13,13 +13,6 @@ Date: 4/6/25
 Refrences: Google (for sprintf)
 */
 
-/*
-TODO:
-- Maybe implement min/standard bets
-  -- Must have a factor of 5 or so
-- More comments to explain?
-*/
-
 
 void shuffleDeck(Cards* input) {
   // resets the deck
@@ -155,7 +148,7 @@ void playerTurn(Cards* deck, int* playerVal, int* playerAce, int* dealerVal, int
         
         else {
           // player can double
-          updateBalance(p, -(*playerBet));
+          updateBalance(p, -(*bet));
           *bet += *bet;
           
           printf("You have doubled you bet.\n");
@@ -234,7 +227,7 @@ void dealerTurn(Cards* deck, int* dealerVal, int* dealerAce) {
 }
 
 
-void resolve(int* playerVal, int* dealerVal, int* chips, int* bet) {
+void resolve(int* playerVal, int* dealerVal, player* p, int* bet) {
   /* 
   various checks for wins/loss/ties
   win - player recieves double bet
@@ -246,7 +239,7 @@ void resolve(int* playerVal, int* dealerVal, int* chips, int* bet) {
   if (*playerVal > 21 && *dealerVal > 21) {
     printf("\nDealer and player bust. Bet returns to player.\n");
     
-    *chips += *bet;
+   updateBalance(p, *bet);
   }
   
   // dealer bust, win
@@ -257,7 +250,7 @@ void resolve(int* playerVal, int* dealerVal, int* chips, int* bet) {
     *bet += *bet;
      
     // give back to the player
-    updateBalance(p, *playerBet); 
+    updateBalance(p, *bet); 
   }
   
   // player bust, loss
@@ -275,28 +268,28 @@ void resolve(int* playerVal, int* dealerVal, int* chips, int* bet) {
     printf("\nPlayer has higher value. Player wins.\n");
     *bet += *bet;
     
-    updateBalance(p, *playerBet);
+    updateBalance(p, *bet);
   }
   
   // same value, tie
   else if (*playerVal == *dealerVal) {
     printf("\nDealer and player tie. Bet returns to player.\n");
     
-    updateBalance(p, *playerBet);;
+    updateBalance(p, *bet);;
   }
   
   // backup check, shouldn't trigger, considered a tie
   else {
     printf("\nCannot resolve. Bet returns to player.\n");
     
-    updateBalance(p, *playerBet);
+    updateBalance(p, *bet);
   }
   
   sleep(1);
 }
 
 
-void playBlackjack(player p*) {
+void playBlackjack(player *p) {
   Cards deck;
   shuffleDeck(&deck); // create and populate the deck
   
@@ -342,8 +335,8 @@ void playBlackjack(player p*) {
             shuffleDeck(&deck);
           }
           
-          // if player has chips, go as usual
-          if (playerChips > 0) {
+          // if player has balance, go as usual
+          if (p->balance > 0) {
             // checks the players bet
             playerBet = validateBet(p);
             updateBalance(p, -(playerBet));
@@ -355,8 +348,8 @@ void playBlackjack(player p*) {
             resolve(&playerValue, &dealerValue, p, &playerBet);
             
             // if player has balance, allow to play again
-            if (playerChips > 0) {
-              printf("\nYou have %d chips. Do you want to play again? \n(1 for yes, 2 for no)\n", playerChips);
+            if (p->balance > 0) {
+              printf("\nYou have %d chips. Do you want to play again? \n(1 for yes, 2 for no)\n", p->balance);
               if (scanf("%d", &run) == 0) {
                 while (getchar() != '\n');
                 run = 0;
@@ -366,7 +359,7 @@ void playBlackjack(player p*) {
           }
           
           // shouldn't reach here, but automatically exits run loops if out of chips
-          if (playerChips <= 0) {
+          if (p->balance <= 0) {
             printf("You don't have enough chips to play.\n");
             run = 0;
           }
