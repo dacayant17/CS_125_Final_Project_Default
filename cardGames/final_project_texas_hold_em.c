@@ -229,6 +229,25 @@ int strongestHand(card c1, card c2, card c3, card c4, card c5, card c6, card c7)
   return largest;
 }
 
+int getValidInt(const char *prompt) {
+  int num;
+  int result;
+
+  while (1) {
+      printf("%s", prompt);
+      result = scanf("%d", &num);
+
+      // Clear any extra input from the buffer
+      while (getchar() != '\n');
+
+      if (result == 1) {
+          return num; // Valid input, return it
+      } else {
+          printf("Invalid input. Please enter a valid integer.\n");
+      }
+  }
+}
+
 //int main(int argc, char *argv[]) {
 int main() {
   //int balance = atoi(argv[1]);
@@ -239,6 +258,8 @@ int main() {
                            "Wayne", "Zach"};
   int balance = 1000;
   int pot = 0;
+  int currentBet = 0;
+  int num;
   int choice = 1;
   int i, odds, temp;
   char suits[4] = {'D', 'H', 'S', 'C'};
@@ -282,7 +303,39 @@ int main() {
   players[4].bal = balance;
   players[4].isPlayer = 1;
 
-  //while (choice) {
-    
-  //}
+  //Begin Game
+  printf("Welcome to Texas Hold Em\n");
+  printf("The goal of the game is to have the highest ranking hand\n");
+  printf("The game begins now\n");
+
+  while (choice) {
+    // Reset/Begin Game
+    for (i = 0; i < 4; i++) {
+      num = (rand() % 52);
+      while (!(deck[num].count)) {
+        players[i].c1 = deck[num];
+      }
+      num = (rand() % 52);
+      while (!(deck[num].count)) {
+        players[i].c2 = deck[num];
+      }
+    }
+
+    for (i = 0; i < 4; i++) {
+      printCard(players[i].c1.suit, players[i].c1.rank);
+      printCard(players[i].c2.suit, players[i].c2.rank);
+    }
+  
+    //End of Game/Continue
+    num = 2;
+    while ((num > 1) || (num < 0)) {
+      num = getValidInt("Would you like to continue?\n (1) Yes\n (0) No\n");
+    }
+    if (num = 1) {
+      choice = 1;
+    }
+    else {
+      choice = 0;
+    }
+  }
 }
