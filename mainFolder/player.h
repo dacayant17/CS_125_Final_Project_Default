@@ -14,5 +14,7 @@ void createPlayer(player *p);
 void displayPlayer(const player *p);
 void updateBalance(player *p, int amount);
 int validateBet(player *p);
+void loadData(player *p);
+void saveData(player *p);
 
 #endif // PLAYER_H

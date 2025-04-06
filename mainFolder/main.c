@@ -54,7 +54,8 @@ void mainMenu(player *p) {
         printf("3. Play Texas Hold'em\n");
         printf("4. Play Black jack\n");
         printf("5. Play Roulette\n");
-        printf("6. Exit\n");
+        printf("6. Save data\n");
+        printf("7. Exit\n");
 
         choice = getValidInt("Enter your choice: ");
 
@@ -76,6 +77,9 @@ void mainMenu(player *p) {
                 playRoulette(p);
                 break;
             case 6:
+                saveData(p);
+                break;
+            case 7:
                 printf("Thanks for playing! Goodbye.\n");
                 return;  // Exit the game
             default:
@@ -88,13 +92,40 @@ void mainMenu(player *p) {
     }
 }
 
+void playerMenu(player *p) {
+    int choice;
+
+    while (1) {
+        printf("1. Load player information\n");
+        printf("2. Create Player\n");
+
+        choice = getValidInt("Enter your choice: ");
+
+        switch (choice) {
+            case 1:
+                loadData(p);
+                break;
+            case 2:
+                createPlayer(p);
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+                continue;
+        }
+
+        // Exit loop after a valid choice
+        break;
+    }
+
+    // Menu complete
+    printf("Player setup complete.\n");
+}
+
 int main() {
     /* Declaring the player variable */
     player player1;
     
-    createPlayer(&player1);
-    displayPlayer(&player1);
-
+    playerMenu(&player1);
     mainMenu(&player1);
 
     return 0;

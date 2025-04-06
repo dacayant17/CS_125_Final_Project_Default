@@ -9,6 +9,8 @@ Todo: Error checking
 #include <stdlib.h>
 #include "player.h"
 
+const char* INPUT_FORMAT = " %d, %49[^\n]";
+
 
 /*
  * createPlayer - Initializes a new player by setting their name and balance.
@@ -88,4 +90,43 @@ int validateBet(player *p) {
     } while (bet <= 0 || bet > p->balance);
 
     return bet;  // Return the valid bet amount
+}
+
+
+void loadData(player *p) {
+    FILE* file = fopen("saved_data.txt", "r");
+    if (file == NULL)
+    {
+        printf("No saved data found.\n");
+        createPlayer(p); // Function that initializes a new player
+        return;
+    }
+
+    if (fscanf(file, INPUT_FORMAT, &p->balance, p->name) != 2)
+    {
+        printf("Saved data is corrupted or unreadable.\n");
+        createPlayer(p);
+    }
+    else
+    {
+        printf("Welcome back, %s! Your balance is $%d.\n", p->name, p->balance);
+    }
+
+    fclose(file);
+}
+
+
+void saveData(player *p) {
+    FILE* file = fopen("saved_data.txt", "w");
+    if (file == NULL)
+    {
+        printf("Error: Could not save data.\n");
+        return;
+    }
+
+    // Write balance and name in the same format used in load_data
+    fprintf(file, "%d, %s\n", p->balance, p->name);
+
+    fclose(file);
+    printf("Game data saved for %s with balance $%d.\n", p->name, p->balance);
 }
