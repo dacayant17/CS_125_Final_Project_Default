@@ -10,26 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "texas.h"
 
-typedef struct Card {
-  char suit;
-  int rank;
-  int count;
-} card;
-
-typedef struct Person {
-  card c1;
-  card c2;
-  int bal;
-  int commitedBal;
-  int foldChance;
-  int betChance;
-  int callChance;
-  char name[50];
-  int isPlayer;
-  int isFolded;
-  int isAllIn;
-} Player;
 
 void printCard(char suit, char rank) {
   printf("%c", suit);

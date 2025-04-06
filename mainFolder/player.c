@@ -75,12 +75,12 @@ int validateBet(player *p) {
             printf("Your balance is zero. You cannot continue playing.\n");
             exit(0);
         }
-        
+
         // Check if the bet is valid (greater than 0 and not more than the current balance)
         if (bet <= 0) {
             printf("Bet amount must be greater than 0. Please try again.\n");
-        } else if (bet >= p->balance) {
-            printf("You cannot bet your entire balance of $%d. Please bet less than your total balance.\n", p->balance);
+        } else if (bet > p->balance) {
+            printf("You cannot bet more than your balance of $%d. Please try again.\n", p->balance);
         } else {
             break;  // Valid bet
         }
