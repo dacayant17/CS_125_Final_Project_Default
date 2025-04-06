@@ -1,6 +1,10 @@
 /*
-Authors: Preston
-Reference: CS125, Google
+ * File: main.c
+ * Author: Preston
+ * Course: CS 125
+ * Assignment: Group Project
+ * Date: 4/6/25
+ * Refrences: CS125, Google
 */
 
 

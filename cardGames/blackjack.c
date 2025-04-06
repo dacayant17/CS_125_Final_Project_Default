@@ -1,17 +1,19 @@
+/*
+ * File: blackjack.c
+ * Author: Michael Higley
+ * Course: CS 125
+ * Assignment: Group Project
+ * Date: 4/6/25
+ * Refrences: Google (for sprintf)
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include <ctype.h>
 #include "blackjack.h"
-
-/*
-File: blackjack.c
-Author: Michael Higley
-Assignment: Group Project
-Date: 4/6/25
-Refrences: Google (for sprintf)
-*/
 
 
 void shuffleDeck(Cards* input) {

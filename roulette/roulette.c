@@ -15,6 +15,7 @@
     num1-num2=
 */
 
+//prints table with colors
 void printTable(){
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     printf("        ~~~~~~~~\n");
@@ -77,6 +78,8 @@ void spintTable(){
     printf("        ~~~~~~~~ \n");    
 }
 */
+
+//sets the bet amount
 int betamount(int totbal,int bettimes,int *bet, int *run){ 
     printf("\nEnter your bet amount:");
     scanf("%d",bet);
@@ -103,7 +106,7 @@ spinres spin() {
     return s;
 }
 
-
+//main function that allows the paler to play the game
 void playRoulette(player *p){
     char buffer[100],to[2],*bettype[100],buffer2[2],buffer3[2];
     int num1=-1,run=1,num2=-1,bet[100],totbal=p->balance,choice,bettimes=0,idx=0,totbet=0,temp,win=0,loose=0,run2=1;

@@ -1,3 +1,13 @@
+/*
+ * File: blackjack.c
+ * Author: Michael Higley
+ * Course: CS 125
+ * Assignment: Group Project
+ * Date: 4/6/25
+ * Refrences: Google (for sprintf)
+*/
+
+
 #ifndef BLACKJACK_H
 #define BLACKJACK_H
 

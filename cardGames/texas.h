@@ -1,3 +1,13 @@
+/*
+ * File: texas.c
+ * Author: Timothy Dacayanan
+ * Course: CS 125
+ * Assignment: Final Project- Texas Hold Em
+ * Date: 4/6/25
+ * Refrences: 
+*/
+
+
 #ifndef TEXAS_H
 #define TEXAS_H
 

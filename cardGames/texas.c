@@ -1,10 +1,12 @@
-
 /*
+ * File: texas.c
  * Author: Timothy Dacayanan
  * Course: CS 125
  * Assignment: Final Project- Texas Hold Em
- * Date: 3/11/2025
+ * Date: 4/6/25
+ * Refrences: 
 */
+
 
 #include <stdio.h>
 #include <stdlib.h>
