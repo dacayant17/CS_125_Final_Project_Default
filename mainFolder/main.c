@@ -11,6 +11,7 @@ Todo: Error checking
 #include "../slots/slots.h"
 #include "../roulette/roulette.h"
 #include "../cardGames/blackjack.h"
+#include "../cardGames/texas.h"
 
 
 int getValidInt(const char *prompt) {
