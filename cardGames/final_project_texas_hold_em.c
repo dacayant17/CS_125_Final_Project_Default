@@ -4,7 +4,6 @@
  * Course: CS 125
  * Assignment: Final Project- Texas Hold Em
  * Date: 3/11/2025
- * Preston was here
 */
 
 #include <stdio.h>
@@ -232,34 +231,10 @@ int strongestHand(card c1, card c2, card c3, card c4, card c5, card c6, card c7)
   return largest;
 }
 
-int getValidInt(const char *prompt) {
-  int num;
-  int result;
-
-  while (1) {
-      printf("%s", prompt);
-      result = scanf("%d", &num);
-
-      // Clear any extra input from the buffer
-      while (getchar() != '\n');
-
-      if (result == 1) {
-          return num; // Valid input, return it
-      } else {
-          printf("Invalid input. Please enter a valid integer.\n");
-      }
-  }
-}
-
-//int main(int argc, char *argv[]) {
-int main() {
-  //int balance = atoi(argv[1]);
-  //char name[50] = atoi(argv[2]);
-  char name[50] = "Example";
+int playTexasHoldEm(int balance, char name[50]) {
   char nameList[20][10] = {"Amy", "Bernard", "Chris", "Dan", "Ed", "Fred", "George", "Han", "James",
                            "Kyle", "Liam", "Mary", "Noah", "Owen", "Phil", "Ryan", "Sam", "Tom", 
                            "Wayne", "Zach"};
-  int balance = 1000;
   int bigBlind = (balance / 50);
   int smallBlind = (bigBlind / 2);
   int currentPlayer;
@@ -313,19 +288,6 @@ int main() {
   players[4].commitedBal = 0;
   players[4].isAllIn = 0;
 
-  /*
-  for (i = 0; i < 5; i++) {
-    printf("%s\n", players[i].name);
-    printf("Balance: %i\n", players[i].bal);
-    printf("Commited Balance: %i\n", players[i].commitedBal);
-    printf("Is Folded: %i\n", players[i].isFolded);
-    printf("Is Player: %i\n", players[i].isPlayer);
-    printf("Fold Odds: %i\n", players[i].foldChance);
-    printf("Bet Odds: %i\n", players[i].betChance);
-    printf("Call Odds: %i\n", players[i].callChance);
-  }
-  */
-
   //Begin Game
   printf("Welcome to Texas Hold Em\n");
   printf("The goal of the game is to have the highest ranking hand\n");
@@ -334,6 +296,11 @@ int main() {
   while (choice) {
     //Game Set Up
     pot = 0;
+    for (i = 0; i < 5; i++) {
+      players[i].isFolded = 0;
+      players[i].commitedBal = 0;
+      players[i].isAllIn = 0;
+    }
     //Small Blind
     players[0].commitedBal = smallBlind;
     printf("%s bets %i\n", players[0].name, smallBlind);
@@ -385,7 +352,7 @@ int main() {
     }
 
 
-    //The Flop
+    //Cards are Passed Out
     //Set Up
     currentPlayer = 2;
     currentBet = bigBlind;
@@ -394,9 +361,11 @@ int main() {
     printf("Hello %s, you were dealt: \n", name);
     printCard(players[4].c1.suit, players[4].c1.rank);
     printCard(players[4].c2.suit, players[4].c2.rank);
+    printf("Your balance: %i\n", players[4].bal);
 
     //Begin Play
     while (raised != currentPlayer) {
+      printf("\n");
       if (!(players[currentPlayer].isFolded)) {
         if (players[currentPlayer].isPlayer) {
           if (!(players[currentPlayer].isAllIn)) {
@@ -431,7 +400,7 @@ int main() {
               if (!(players[currentPlayer].isAllIn)) {
                 //Player Bet
                 temp = 0;
-                while (temp < (currentBet * 2)) {
+                while ((temp < (currentBet * 2)) || (temp == 0)) {
                   temp = getValidInt("Please Enter Your Bet: ");
                 }
                 if (temp > players[currentPlayer].bal) {
@@ -442,13 +411,14 @@ int main() {
                   raised = currentPlayer;
                 } else {
                   currentBet = temp;
+                  players[currentPlayer].commitedBal = currentBet;
                   raised = currentPlayer;
                   printf("%s bet %i\n", players[currentPlayer].name, currentBet);
                 }
               }
             } else {
               //AI Bet
-              temp = (((rand() % 2) + 2) * currentBet);
+              temp = (bigBlind + (((rand() % 2) + 1) * currentBet));
               currentBet = temp;
               raised = currentPlayer;
               players[currentPlayer].commitedBal = currentBet;
@@ -457,8 +427,19 @@ int main() {
             break;
           case (1):
             //Call
-            players[currentPlayer].commitedBal = currentBet;
-            printf("%s called\n", players[currentPlayer].name);
+            if (players[currentPlayer].isPlayer) {
+              if (players[currentPlayer].bal < currentBet) {
+                players[currentPlayer].commitedBal = players[currentPlayer].bal;
+                printf("%s is all in\n", players[currentPlayer].name);
+                players[currentPlayer].isAllIn = 1;
+              } else {
+                players[currentPlayer].commitedBal = currentBet;
+                printf("%s called\n", players[currentPlayer].name);
+              }
+            } else {
+              players[currentPlayer].commitedBal = currentBet;
+              printf("%s called\n", players[currentPlayer].name);
+            }
             break;
           case (2):
             //Fold
@@ -478,13 +459,17 @@ int main() {
         currentPlayer = 0;
       }
     }
-
+    
     //First Round Final Actions
+    printf("\n");
     for (i = 0; i < 5; i++) {
+      if (players[i].isPlayer) {
+        players[i].bal -= players[i].commitedBal;
+      }
       pot += players[i].commitedBal;
       players[i].commitedBal = 0;
     }
-    printf("The current pot is: %i\n", pot);
+    printf("\n");
 
     //The Flop
     //First 3 Community Cards are Shown
@@ -492,11 +477,14 @@ int main() {
     for (i = 0; i < 3; i++) {
       printCard(comCards[i].suit, comCards[i].rank);
     }
+    printf("\n");
 
     //Display Own Cards Again
     printf("Your Cards:\n", name);
     printCard(players[4].c1.suit, players[4].c1.rank);
     printCard(players[4].c2.suit, players[4].c2.rank);
+    printf("Your balance: %i\n", players[4].bal);
+    printf("\n");
 
     //Set Up
     currentBet = 0;
@@ -506,6 +494,7 @@ int main() {
 
     //Begin Flop
     while ((raised != currentPlayer) || (!check)) {
+      printf("\n");
       check = 1;
       if (!(players[currentPlayer].isFolded)) {
         if (players[currentPlayer].isPlayer) {
@@ -541,7 +530,7 @@ int main() {
               if (!(players[currentPlayer].isAllIn)) {
                 //Player Bet
                 temp = 0;
-                while (temp < (currentBet * 2)) {
+                while ((temp < (currentBet * 2)) || (temp == 0)) {
                   temp = getValidInt("Please Enter Your Bet: ");
                 }
                 if (temp > players[currentPlayer].bal) {
@@ -552,13 +541,14 @@ int main() {
                   raised = currentPlayer;
                 } else {
                   currentBet = temp;
+                  players[currentPlayer].commitedBal = currentBet;
                   raised = currentPlayer;
                   printf("%s bet %i\n", players[currentPlayer].name, currentBet);
                 }
               }
             } else {
               //AI Bet
-              temp = (((rand() % 2) + 2) * currentBet);
+              temp = (bigBlind + (((rand() % 2) + 1) * currentBet));
               currentBet = temp;
               raised = currentPlayer;
               players[currentPlayer].commitedBal = currentBet;
@@ -567,8 +557,19 @@ int main() {
             break;
           case (1):
             //Call
-            players[currentPlayer].commitedBal = currentBet;
-            printf("%s called\n", players[currentPlayer].name);
+            if (players[currentPlayer].isPlayer) {
+              if (players[currentPlayer].bal < currentBet) {
+                players[currentPlayer].commitedBal = players[currentPlayer].bal;
+                printf("%s is all in\n", players[currentPlayer].name);
+                players[currentPlayer].isAllIn = 1;
+              } else {
+                players[currentPlayer].commitedBal = currentBet;
+                printf("%s called\n", players[currentPlayer].name);
+              }
+            } else {
+              players[currentPlayer].commitedBal = currentBet;
+              printf("%s called\n", players[currentPlayer].name);
+            }
             break;
           case (2):
             //Fold
@@ -590,6 +591,7 @@ int main() {
     }
 
     //Flop Final Actions
+    printf("\n");
     for (i = 0; i < 5; i++) {
       if (players[i].isPlayer) {
         players[i].bal -= players[i].commitedBal;
@@ -598,6 +600,7 @@ int main() {
       players[i].commitedBal = 0;
     }
     printf("The current pot is: %i\n", pot);
+    printf("\n");
 
 
     //The Turn
@@ -606,11 +609,14 @@ int main() {
     for (i = 0; i < 4; i++) {
       printCard(comCards[i].suit, comCards[i].rank);
     }
+    printf("\n");
 
     //Display Own Cards Again
     printf("Your Cards:\n", name);
     printCard(players[4].c1.suit, players[4].c1.rank);
     printCard(players[4].c2.suit, players[4].c2.rank);
+    printf("Your balance: %i\n", players[4].bal);
+    printf("\n");
 
     //Set Up
     currentBet = 0;
@@ -620,6 +626,7 @@ int main() {
 
     //Begin Turn
     while ((raised != currentPlayer) || (!check)) {
+      printf("\n");
       check = 1;
       if (!(players[currentPlayer].isFolded)) {
         if (players[currentPlayer].isPlayer) {
@@ -655,7 +662,7 @@ int main() {
               if (!(players[currentPlayer].isAllIn)) {
                 //Player Bet
                 temp = 0;
-                while (temp < (currentBet * 2)) {
+                while ((temp < (currentBet * 2)) || (temp == 0)) {
                   temp = getValidInt("Please Enter Your Bet: ");
                 }
                 if (temp > players[currentPlayer].bal) {
@@ -666,13 +673,14 @@ int main() {
                   raised = currentPlayer;
                 } else {
                   currentBet = temp;
+                  players[currentPlayer].commitedBal = currentBet;
                   raised = currentPlayer;
                   printf("%s bet %i\n", players[currentPlayer].name, currentBet);
                 }
               }
             } else {
               //AI Bet
-              temp = (((rand() % 2) + 2) * currentBet);
+              temp = (bigBlind + (((rand() % 2) + 1) * currentBet));
               currentBet = temp;
               raised = currentPlayer;
               players[currentPlayer].commitedBal = currentBet;
@@ -681,8 +689,19 @@ int main() {
             break;
           case (1):
             //Call
-            players[currentPlayer].commitedBal = currentBet;
-            printf("%s called\n", players[currentPlayer].name);
+            if (players[currentPlayer].isPlayer) {
+              if (players[currentPlayer].bal < currentBet) {
+                players[currentPlayer].commitedBal = players[currentPlayer].bal;
+                printf("%s is all in\n", players[currentPlayer].name);
+                players[currentPlayer].isAllIn = 1;
+              } else {
+                players[currentPlayer].commitedBal = currentBet;
+                printf("%s called\n", players[currentPlayer].name);
+              }
+            } else {
+              players[currentPlayer].commitedBal = currentBet;
+              printf("%s called\n", players[currentPlayer].name);
+            }
             break;
           case (2):
             //Fold
@@ -704,6 +723,7 @@ int main() {
     }
 
     //Turn Final Actions
+    printf("\n");
     for (i = 0; i < 5; i++) {
       if (players[i].isPlayer) {
         players[i].bal -= players[i].commitedBal;
@@ -712,6 +732,7 @@ int main() {
       players[i].commitedBal = 0;
     }
     printf("The current pot is: %i\n", pot);
+    printf("\n");
 
 
     //The River
@@ -720,11 +741,14 @@ int main() {
     for (i = 0; i < 5; i++) {
       printCard(comCards[i].suit, comCards[i].rank);
     }
+    printf("\n");
 
     //Display Own Cards Again
     printf("Your Cards:\n", name);
     printCard(players[4].c1.suit, players[4].c1.rank);
     printCard(players[4].c2.suit, players[4].c2.rank);
+    printf("Your balance: %i\n", players[4].bal);
+    printf("\n");
 
     //Set Up
     currentBet = 0;
@@ -734,6 +758,7 @@ int main() {
 
     //Begin River
     while ((raised != currentPlayer) || (!check)) {
+      printf("\n");
       check = 1;
       if (!(players[currentPlayer].isFolded)) {
         if (players[currentPlayer].isPlayer) {
@@ -769,7 +794,7 @@ int main() {
               if (!(players[currentPlayer].isAllIn)) {
                 //Player Bet
                 temp = 0;
-                while (temp < (currentBet * 2)) {
+                while ((temp < (currentBet * 2)) || (temp == 0)) {
                   temp = getValidInt("Please Enter Your Bet: ");
                 }
                 if (temp > players[currentPlayer].bal) {
@@ -780,13 +805,14 @@ int main() {
                   raised = currentPlayer;
                 } else {
                   currentBet = temp;
+                  players[currentPlayer].commitedBal = currentBet;
                   raised = currentPlayer;
                   printf("%s bet %i\n", players[currentPlayer].name, currentBet);
                 }
               }
             } else {
               //AI Bet
-              temp = (((rand() % 2) + 2) * currentBet);
+              temp =  (bigBlind + (((rand() % 2) + 1) * currentBet));
               currentBet = temp;
               raised = currentPlayer;
               players[currentPlayer].commitedBal = currentBet;
@@ -795,8 +821,19 @@ int main() {
             break;
           case (1):
             //Call
-            players[currentPlayer].commitedBal = currentBet;
-            printf("%s called\n", players[currentPlayer].name);
+            if (players[currentPlayer].isPlayer) {
+              if (players[currentPlayer].bal < currentBet) {
+                players[currentPlayer].commitedBal = players[currentPlayer].bal;
+                printf("%s is all in\n", players[currentPlayer].name);
+                players[currentPlayer].isAllIn = 1;
+              } else {
+                players[currentPlayer].commitedBal = currentBet;
+                printf("%s called\n", players[currentPlayer].name);
+              }
+            } else {
+              players[currentPlayer].commitedBal = currentBet;
+              printf("%s called\n", players[currentPlayer].name);
+            }
             break;
           case (2):
             //Fold
@@ -818,6 +855,7 @@ int main() {
     }
 
     //River Final Actions
+    printf("\n");
     for (i = 0; i < 5; i++) {
       if (players[i].isPlayer) {
         players[i].bal -= players[i].commitedBal;
@@ -826,6 +864,7 @@ int main() {
       players[i].commitedBal = 0;
     }
     printf("The current pot is: %i\n", pot);
+    printf("\n");
 
     //Showdown
     //All Cards Shown
@@ -833,12 +872,14 @@ int main() {
     for (i = 0; i < 5; i++) {
       printCard(comCards[i].suit, comCards[i].rank);
     }
+    printf("\n");
 
     for (i = 0; i < 5; i++) {
       printf("%s:\n", players[i].name);
       printCard(players[i].c1.suit, players[i].c1.rank);
       printCard(players[i].c2.suit, players[i].c2.rank);
     }
+    printf("\n");
 
     //Winner is calulated
     temp = 0;
@@ -854,22 +895,31 @@ int main() {
         }
       } 
     }
+    printf("\n");
 
-    printf("%s wins!", players[winner].name);
+    printf("%s wins!\n", players[winner].name);
     if (players[winner].isPlayer) {
       players[winner].bal += pot;
     }
+    printf("\n");
+    printf("Your current balance: %i\n", players[4].bal);
+    printf("\n");
 
     //End of Game
-    num = 2;
-    while ((num > 1) || (num < 0)) {
-      num = getValidInt("Would you like to continue?\n (1) Yes\n (0) No\n");
-    }
-    if (num == 1) {
-      choice = 1;
-    }
-    else {
+    if (players[4].bal == 0) {
       choice = 0;
+    } else {
+      num = 2;
+      while ((num > 1) || (num < 0)) {
+        num = getValidInt("Would you like to continue?\n (1) Yes\n (0) No\n");
+      }
+      if (num == 1) {
+        choice = 1;
+      }
+      else {
+        choice = 0;
+      }
+     printf("\n");
     }
   }
   return (players[4].bal);
