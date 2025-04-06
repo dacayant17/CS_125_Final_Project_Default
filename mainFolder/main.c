@@ -67,7 +67,7 @@ void mainMenu(player *p) {
                 break;
             case 3:
                 // You can implement the Texas Hold'em game here
-                printf("Texas Hold'em functionality is coming soon!\n");
+                playTexasHoldEm(p->balance, p->name);
                 break;
             case 4:
                 playBlackjack(p);
