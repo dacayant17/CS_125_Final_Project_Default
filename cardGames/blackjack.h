@@ -1,5 +1,5 @@
 /*
- * File: blackjack.c
+ * File: blackjack.h
  * Author: Michael Higley
  * Course: CS 125
  * Assignment: Group Project

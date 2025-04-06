@@ -2,3 +2,12 @@ Group Name: Default
 Project: Casino
 Authors: Timothy Dacayanan, Preston Shultz, Tommy Boston Jr., Michael Higley
 
+Slide explaining the games: https://myerauedu-my.sharepoint.com/:p:/g/personal/shultzp1_my_erau_edu/EfdcLU8MjZBAurrd_gxf82UBBEuw59yapXP75H71ELzvxQ?e=xnroXt
+
+To complie and run the program the projects uses a make file. Just enter "make" into your terminal.
+The compliled file is then named finalpro, so you just run that file and the program is now running.
+
+Each game contains a help function to understand how to play each game.
+In the roulette game it uses sleep(), so ensure that you wait for each section to load.
+If you enter (1) to show how to play the roulette game, after understanding the game you can enter 0 to play.
+
