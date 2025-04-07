@@ -312,6 +312,7 @@ void playRoulette(player *p){
 
                     //Adding the money to the account
                     totbal=totbal+win-loose;
+                    totbal=p->balance;
                     printf("You won: %d",win);
                     printf("                You lost: %d",loose);
                     printf("                Your account Bal: %d",totbal);
