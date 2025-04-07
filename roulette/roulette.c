@@ -2,20 +2,14 @@
 
 
 /*
-    Authors: Tommy Boston Jr., Preston(I tried my best man, but only god can fix this)
-    Reference: 
-    A simple game of roulette
-
-    Even=
-    Odd=
-    Red= 
-    Blue=
-    1-36=
-    0 & 00=
-    num1-num2=
+* File: roulette.c
+* Authors: Tommy Boston Jr., Preston(I tried my best man, but only god can fix this)
+* Assignment:Project
+* Date:4/6/25
+* Resources: Google
 */
 
-//prints table with colors
+//Prints table with colors
 void printTable(){
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     printf("        ~~~~~~~~\n");
@@ -38,48 +32,41 @@ void printTable(){
     printf("|                  EVEN | \033[31mRED\033[37m | \033[36mBLUE\033[37m | ODD |               |\n");
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 }
-/*
-void spintTable(){
-    char *tabnum[12] , num1[20]="\033[31m1\033[37m", num2[20]="\033[36m2\033[37m/", num3[20]="\033[32m0\033[37m", num4[20]="\033[32m00\033[37m", num5[20]="\033[31m5\033[37m", num6[20]="\033[36m10\033[37m", num7[20]="\033[31m7\033[37m", num8[20]="\033[31m9\033[37m", num9[20]="\033[36m8\033[37m", num10[20]="\033[36m4\033[37m", num11[20]="\033[36m6\033[37m",num12[20]="\033[31m3\033[37m";
-    int numtable[11],idx,idx2;
-    for (idx=0;idx<12;idx++);{
-        numtable[idx]=idx+1;
-    }
-    tabnum[1]=malloc(strlen(num1)+1);
-    tabnum[2]=malloc(strlen(num2)+1);
-    tabnum[3]=malloc(strlen(num3)+1);
-    tabnum[4]=malloc(strlen(num4)+1);
-    tabnum[5]=malloc(strlen(num5)+1);
-    tabnum[6]=malloc(strlen(num6)+1);
-    tabnum[7]=malloc(strlen(num7)+1);
-    tabnum[8]=malloc(strlen(num8)+1);
-    tabnum[9]=malloc(strlen(num9)+1);
-    tabnum[10]=malloc(strlen(num10)+1);
-    tabnum[11]=malloc(strlen(num11)+1);
-    tabnum[12]=malloc(strlen(num12)+1);
-    for
-        for(idx2=0;idx2<12;idx2++){
-            if(numtable[idx2]>12){
-                numtable[idx2]=numtable[idx2]-12}
-    printf("        ~~~~~~~~\n");
-    printf("       / \\ %s",tabnum[idx]);  
-    printf("%s\\ \n",tabnum[idx]);
-    printf("      / %s \\",tabnum[idx]);   
-    printf("/%s\\ \n",tabnum[idx]);
-    printf("     / %s   \\ /",tabnum[idx]);  
-    printf("%s\\ \n",tabnum[idx]);
-    printf("    (~~~~~~~o~~~~~~) \n");
-    printf("     \\ %s   / \\",tabnum[idx]);   
-    printf("%s/ \n",tabnum[idx]);
-    printf("      \\ %s /   \\",tabnum[idx]);
-    printf("%s/ \n",tabnum[idx]);
-    printf("       \\ /%s 
-    printf("%s\\/ \n",tabnum[idx]);
-    printf("        ~~~~~~~~ \n");    
-}
-*/
 
-//sets the bet amount
+// Spins the table with colors
+void spinTable() {
+
+    const char *numbers[] = {
+        "\033[36m10\033[37m", "\033[31m 7\033[37m", "\033[31m 9\033[37m", "\033[36m 8\033[37m",
+        "\033[36m 4\033[37m", "\033[36m 6\033[37m", "\033[31m 3\033[37m", "\033[31m 1\033[37m",
+        "\033[36m 2\033[37m", "\033[32m 0\033[37m", "\033[32m00\033[37m", "\033[31m 5\033[37m"
+    };
+
+    const int size = 12;
+    int offset, i;
+    const char *n[12];
+    for (offset=0;offset<30;offset++) {
+        printf("\033[2J\033[H");
+        for (i=0;i<size;i++) {
+            n[i]=numbers[(i+offset)%size];
+        }
+        printf("        ~~~~~~~~\n");
+        printf("       / \\%s %s/\\ \n", n[0], n[1]);
+        printf("      / %s\\   /%s\\ \n", n[2], n[3]);
+        printf("     /  %s \\ / %s \\ \n", n[4], n[5]);
+        printf("    (~~~~~~~o~~~~~~) \n");
+        printf("     \\ %s  / \\%s  / \n", n[6], n[7]);
+        printf("      \\ %s/   \\%s/ \n", n[8], n[9]);
+        printf("       \\ /%s %s\\/ \n", n[10], n[11]);
+        printf("        ~~~~~~~~\n");
+
+        usleep(150000);
+    }
+}
+
+
+
+//Gets the bet amount from player
 int betamount(int totbal,int bettimes,int *bet, int *run){ 
     printf("\nEnter your bet amount:");
     scanf("%d",bet);
@@ -92,7 +79,7 @@ int betamount(int totbal,int bettimes,int *bet, int *run){
     }
 }
 
-
+// Spins the table for winners
 spinres spin() {
     struct spinres s;
     int temp=0;
@@ -106,46 +93,69 @@ spinres spin() {
     return s;
 }
 
-//main function that allows the paler to play the game
+//Main function that allows the paler to play the game
 void playRoulette(player *p){
+
+    //Defining variables
     char buffer[100],to[2],*bettype[100],buffer2[2],buffer3[2];
     int num1=-1,run=1,num2=-1,bet[100],totbal=p->balance,choice,bettimes=0,idx=0,totbet=0,temp,win=0,loose=0,run2=1;
     struct spinres result;
+
+    //Start of game
     printf("Welcome to Roulette\n");
-    while(run2==1){
-        printf("Play(0), How to play(1),Print Ratios(2),Quit(3)\n");
+    while(run2==1){ //First while loop to be able to play again
+        printf("Play(0), How to play(1),Print Ratios(2),Quit(3)\n"); //Menu
         run=1;
         scanf("%d",&choice);
         while (getchar() != '\n');
+
+        //Print Ratios
         if(choice==2){
         printf("| EVEN | \033[31mRED\033[37m | \033[36mBLUE\033[37m | ODD | ALL= 2:1 (Double Money)\n");
         printf("| 1-12 | 12-24 | 24-36 |= 1:2.3 (2.3x) | 1-18 | 19-36 |=2:1\n");
         printf("Specific Number=3:1 (Triple)\n");
         printf("| \033[32m0\033[37m | \033[32m00\033[37m |= 4:1 (Quadruple)\n");
+
+        //End Game
         }else if(choice==3){
             run2=0;
             break;
+        
+        //How to Play
         }else if (choice==1){
             printf("Hello and welcome to Roulette, here is how to play\n");
             sleep(1);
             printf("The board:\n");
             printTable();
             sleep(1);
-            printf("Ignore the circle on the left it is entirely for looking nice. \n\nThe board starts with colored numbers from 1-36 as well as 0 and 00. You can bet individually on each of these numbers as many times as your balance allows you. There is one of each of these on the board that is spun.\n\n The last 2 rows have different options, the number through number is betting on any of the numbers within that range. \n For example 1-12 would bet on any number >=1 and any number <= 12 that applies to each respective number. The last row is Even numbers, Odd numbers, Red numbers, and Blue numbers each of these only bet for the respective type if any of that type of number is picked you win\n");
+            printf("Ignore the circle on the left it is entirely for looking nice. \n\n");
+            printf("The board starts with colored numbers from 1-36 as well as 0 and 00. You can bet individually on each of these numbers as many times as your balance allows you. There is one of each of these on the board that is spun.\n\n");
+            printf("The last 2 rows have different options, the number through number is betting on any of the numbers within that range. \n"); 
+            printf("For example 1-12 would bet on any number >=1 and any number <= 12 that applies to each respective number. The last row is Even numbers, Odd numbers, Red numbers, and Blue numbers each of these only bet for the respective type if any of that type of number is picked you win\n");
             sleep(10);
             printf("\nPROGRAM SPECIFIC HOW TO:\n");
             sleep(1);
-            printf("The program should start with a prompt of what your bet is meaning a guess on the board entered into the prompt\n Please enter the dash for 1-12 and other ones like it, for all of the words they work with UPPERCASE and lowercase they do not work with a single upper case: Red\n You will be booted to the main menue if you overbet your account or if you enter invalid bet\n The program will prompt you to spin every time a bet is chosen if you want to continue with these bets type 'y' if you would like to enter more bets choose 'n', you can have up to 100 bets going on at the same time\n Everytime the wheel is spun the information of your winnings and losses is saved and you can play again.\n");
+            printf("The program should start with a prompt of what your bet is meaning a guess on the board entered into the prompt\n"); 
+            printf("Please enter the dash for 1-12 and other ones like it, for all of the words they work with UPPERCASE and lowercase they do not work with a single upper case: Red\n");
+            printf("You will be booted to the main menue if you overbet your account or if you enter invalid bet\n");
+            printf("The program will prompt you to spin every time a bet is chosen if you want to continue with these bets type 'y' if you would like to enter more bets choose 'n', you can have up to 100 bets going on at the same time\n");
+            printf("Everytime the wheel is spun the information of your winnings and losses is saved and you can play again.\n");
         sleep(10); 
+
+        //Starting The Game
         }else if(choice==0){
             while(run==1){
                 printTable();
                 printf("total wallet=%d",totbal);
                 printf("             Your total bet amount=%d\n",totbet);
-                printf("Type your bet:");
-                fgets(buffer, sizeof(buffer), stdin);
-                sscanf(buffer,"%d%c%d",&num1,to,&num2);
-                if(strcmp(buffer,"EVEN\n")==0 || strcmp(buffer,"even\n")==0 || strcmp(buffer,"odd\n")==0 || strcmp(buffer,"ODD\n")==0 || strcmp(buffer,"red\n")==0 || strcmp(buffer,"blue\n")==0 || strcmp(buffer,"RED\n")==0 || strcmp(buffer,"BLUE\n")==0){
+                printf("Type your bet type:");
+                fgets(buffer, sizeof(buffer), stdin);//Getting the bet
+                sscanf(buffer,"%d%c%d",&num1,to,&num2);//Parsing the bet
+                for(idx=0;sizeof(buffer)>idx;idx++){
+                    buffer[idx]=toupper(buffer[idx]);
+                }
+                //Figuring out what the bet was
+                if(strcmp(buffer,"EVEN\n")==0 || strcmp(buffer,"ODD\n")==0 || strcmp(buffer,"RED\n")==0 || strcmp(buffer,"BLUE\n")==0){
                     printf("\nYour bet %s",buffer);
                     betamount(totbal,bettimes,&bet[bettimes],&run);
                     bettype[bettimes]=malloc(strlen(buffer)+1);
@@ -175,6 +185,8 @@ void playRoulette(player *p){
                     printf("\ninvalid input\n");
                     break;
                 }
+            
+                //Checking for over balance
                 totbet=0;
                 for(idx=0;idx<=bettimes;idx++){
                     totbet=bet[idx]+totbet;
@@ -186,17 +198,24 @@ void playRoulette(player *p){
                 }else{
                     run=1;
                 }
+
+                //Deciding to spin
                 printf("Would you like to spin (y/n)");
                 scanf("%s",buffer2);
                 while (getchar() != '\n');
                 bettimes++;
+
+                //Spinning
                 if(strcmp(buffer2,"y")==0){
                     result=spin();
+                    spinTable();
                     printf("The winning number was: %s ",result.colorres);
                     printf(", %d\n",result.numres);
+
+                    //Figuring out what bets win and loose
                     for(idx=0;idx<bettimes;idx++){
                         sscanf(bettype[idx],"%d%c%d",&num1,to,&num2);
-                        if (strcmp(bettype[idx],"blue\n")==0 || strcmp(bettype[idx],"BLUE\n")==0){
+                                                if (strcmp(bettype[idx],"BLUE\n")==0){
                             if (strcmp(result.colorres,"Blue")==0){
                                 printf("You win!\n");
                                 win=bet[idx]*2+win;
@@ -204,7 +223,7 @@ void playRoulette(player *p){
                                 printf("You Loose\n");
                                 loose=bet[idx]+loose;                   
                             }
-                        }else if(strcmp(bettype[idx],"EVEN\n")==0 || strcmp(bettype[idx],"even\n")==0 ){
+                        }else if(strcmp(bettype[idx],"EVEN\n")==0){
                             if (result.numres%2==0){
                                 printf("You win!\n");
                                 win=bet[idx]*2+win;
@@ -212,7 +231,7 @@ void playRoulette(player *p){
                                 printf("You Loose\n");
                                 loose=bet[idx]+loose;                     
                             }
-                        }else if(strcmp(bettype[idx],"odd\n")==0 || strcmp(bettype[idx],"ODD\n")==0){
+                        }else if(strcmp(bettype[idx],"ODD\n")==0){
                             if (result.numres%2==1){
                                 printf("You win!\n");
                                 win=bet[idx]*2+win;
@@ -220,7 +239,7 @@ void playRoulette(player *p){
                                 printf("You Loose\n");
                                 loose=bet[idx]+loose;                     
                             }
-                        }else if(strcmp(bettype[idx],"red\n")==0 || strcmp(bettype[idx],"RED\n")==0){
+                        }else if(strcmp(bettype[idx],"RED\n")==0){
                             if (strcmp(result.colorres,"Red")==0){
                                 printf("You win!\n");
                                 win=bet[idx]*2+win;
@@ -290,6 +309,8 @@ void playRoulette(player *p){
                         }
                     
                     }
+
+                    //Adding the money to the account
                     totbal=totbal+win-loose;
                     printf("You won: %d",win);
                     printf("                You lost: %d",loose);

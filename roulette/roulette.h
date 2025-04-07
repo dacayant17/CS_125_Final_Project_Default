@@ -25,4 +25,5 @@ void printTable();
 int betamount(int totbal,int bettimes,int *bet, int *run);
 spinres spin();
 void playRoulette(player *p);
+void spinTable();
 #endif
