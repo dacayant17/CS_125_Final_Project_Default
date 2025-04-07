@@ -87,7 +87,7 @@
                  break;
              case 3:
                  // Play Texas Hold'em game (passing player's balance and name)
-                 playTexasHoldEm(p->balance, p->name);
+                 p->balance = playTexasHoldEm(p->balance, p->name);
                  break;
              case 4:
                  playBlackjack(p);  // Call the blackjack game function
