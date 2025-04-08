@@ -361,6 +361,7 @@ int playTexasHoldEm(int balance, char name[50]) {
     while (raised != currentPlayer) {
       printf("\n");
       //Calculate Number of Folded Players
+      foldTotal = 0;
       for (i = 0; i < 5; i++) {
         foldTotal += players[i].isFolded;
       }
@@ -498,6 +499,7 @@ int playTexasHoldEm(int balance, char name[50]) {
     while ((raised != currentPlayer) || (!check)) {
       printf("\n");
       //Calculate Number of Folded Players
+      foldTotal = 0;
       for (i = 0; i < 5; i++) {
         foldTotal += players[i].isFolded;
       }
@@ -640,6 +642,7 @@ int playTexasHoldEm(int balance, char name[50]) {
       check = 1;
 
       //Calculate Number of Folded Players
+      foldTotal = 0;
       for (i = 0; i < 5; i++) {
         foldTotal += players[i].isFolded;
       }
@@ -781,6 +784,7 @@ int playTexasHoldEm(int balance, char name[50]) {
       check = 1;
       
       //Calculate Number of Folded Players
+      foldTotal = 0;
       for (i = 0; i < 5; i++) {
         foldTotal += players[i].isFolded;
       }
